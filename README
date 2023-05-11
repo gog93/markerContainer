@@ -1,0 +1,108 @@
+Define the Helper marker for the system:
+    Here is the scenario of how the user should interact with the application:
+    • User types: @Helper
+    • System responds: @Helper-
+    • User adds marker name and period: @Helper-email.
+    • System searches for settings for email markers in the database. If not found, it prompts:
+    "Do you want to create a new marker with the name 'email' (y/n)?"
+  If the user types 'y', the system responds:
+    @Helper-email.
+    --Template
+        Please write here the template content. After finishing, go to the new line and type ‘— Wizard.’
+  • After the user completes the template, type –Wizard on the new line. For example, something like this:
+
+    @Helper-email.
+    --Template
+        Hello, {{name}}! This is an automated message from our system.
+        We are writing to inform you that your {{account}} is due for payment. Please log in to your account at {{url}} to make a payment.
+        Thank you for your prompt attention to this matter.
+    --Wizard
+
+
+  • System will return the list of placeholders with the questions marks on the end:
+    @Helper-email.
+    --Template
+    Hello, {{name}}! This is an automated message from our system.
+    We are writing to inform you that your {{account}} is due for payment. Please log in to your account at {{url}} to make a payment.
+    Thank you for your prompt attention to this matter.
+    --Wizard
+    name?
+    account?
+    url?
+
+
+  • After the user completes the template by adding the questions, he adds @End at the end to indicate he wants to save the marker 'email' to the database.
+        Something like this, for example:
+    @Helper-email.
+    --Template
+        Hello, {{name}}! This is an automated message from our system.
+        We are writing to inform you that your {{account}} is due for payment. Please log in to your account at {{url}} to make a payment.
+        Thank you for your prompt attention to this matter. --Wizard
+        What is your name?
+        hat type of account do you have (-Checking-, Savings, Credit Card, Other)?
+        What is the URL for your account login page?
+        @End
+
+
+ Now the procedure for using the token.
+
+   When the token is ready and written to the database. You can write:
+    ///email.
+    Where email is the name of the token.
+    The system will immediately show the first question.
+    ///email.
+    ///What is your name?
+    The user must enter a value after the question mark and put the /// sign after it, meaning the input is complete.
+    ///What is your name?John///
+    The system will ask the following question in the list
+    ///email.
+    ///What is your name?John///
+    ///What type of account do you have (-Checking-, Savings, Credit Card, Other)?checking///
+    ///What is the URL for your account login page?login.io///
+
+After the last questions is answered, the system will append "///End" to the next line
+
+    ///email.
+    ///What is your name?John///
+    ///What type of account do you have (-Checking-, Savings, Credit Card, Other)?checking///
+    ///What is the URL for your account login page?login.io///
+    ///End
+
+ The system then clear the questions and display the filled template like below:
+
+    Hello, John! This is an automated message from our system.
+    We are writing to inform you that your Checking is due for payment.
+    Please log in to your account at login.io to make a payment.
+    Thank you for your prompt attention to this matter.
+
+you can delete marker.
+    @Delete-email.
+    Then the system deletes the marker from database
+
+you can edit marker
+    @Edit-email.
+    Then the system will provide you the marker content.
+
+    @Edit-email.
+    --Template
+    Hello, {{name}}! This is an automated message from our system.
+    We are writing to inform you that your {{account}} is due for payment. Please log in to your account at {{url}} to make a payment.
+    Thank you for your prompt attention to this matter.
+    --Wizard
+    What is your name?
+    What type of account do you have (-Checking-, Savings, Credit Card, Other)?
+    What is the URL for your account login page?
+
+After editing it you should write "@End" at the end and it will save your changes.
+
+    @Edit-email.
+    --Template
+    Hello, {{name}}! This is an automated message from our system.
+    We are writing to inform you that your {{account}} is due for payment. Please log in to your account at {{url}} to make a payment.
+    Thank you for your prompt attention to this matter.
+    --Wizard
+    What is your name?
+    What type of account do you have (-Checking-, Savings, Credit Card, Other)? What is the URL for your account login page?
+    @End
+
+Content will disappear in the file what means that you saved your changes to the server.
